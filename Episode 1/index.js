@@ -15,7 +15,7 @@ app.get("/", (request, response) => {
   response.sendStatus(200);;
 app.listen(process.env.PORT);
 setInterval(() => {
-  http.get(`https://rectangular-robust-catamaran.glitch.me`);
+  http.get(`https://your bot project name.glitch.me`);
 }, 280000);
 
 client.commands = new Discord.Collection();
