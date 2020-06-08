@@ -14,7 +14,7 @@ app.get("/", (request, response) => {
 });
 app.listen(process.env.PORT);
 setInterval(() => {
-  http.get(`https://fantasy-bot.glitch.me`);
+  http.get(`https://your project name.glitch.me`);
 }, 280000);
 
 client.commands = new Discord.Collection();
@@ -41,8 +41,8 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 client.on("ready", async () => {
-  console.log(`${client.user.username} Started!`);
-  client.user.setActivity("Made By Fantasy Tech");
+  console.log(`Ready to go!`);
+  client.user.setActivity("Made by hyperium tech");
 });
 
 client.on("message", async message => {
@@ -70,19 +70,5 @@ client.on("message", async message => {
     return;
   }
 });
-
-client.on("message", async message => {
-  if(message.content.includes("https://")) {
-    //make more commands like this with diff includes
-    let link = await db.fetch(`al_${message.guild.id}`)
-    if(link === null) {
-      return; //it will not do anything if anti-link is disabled
-    }
-    if(link === true) {
-      message.delete()
-      message.reply(`${message.author.username} Links are not allowed in this server :x:`)
-    }
-  } //lets test it
-})
 
 client.login(process.env.TOKEN);
