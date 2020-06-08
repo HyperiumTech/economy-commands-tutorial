@@ -1,6 +1,3 @@
-//First of all You Need to Install npm Quick.db
-// To Install Go to Package.json search quick.db
-
 const Discord = require("discord.js");
 const client = new Discord.Client({ disableEveryone: true });
 const fs = require("fs");
@@ -9,13 +6,15 @@ const prefix = config.prefix;
 const express = require("express");
 const http = require("http");
 const app = express();
-const db = require("quick.db"); // You Need to add this here in order for it to work!
+const cooldown = new Set()
+const db = require('quick.db') // You Need to add this here in order for it to work!
 
 app.get("/", (request, response) => {
-  response.sendStatus(200);;
+  response.sendStatus(200);
+});
 app.listen(process.env.PORT);
 setInterval(() => {
-  http.get(`https://your bot project name.glitch.me`);
+  http.get(`https://fantasy-bot.glitch.me`);
 }, 280000);
 
 client.commands = new Discord.Collection();
@@ -42,12 +41,14 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 client.on("ready", async () => {
-  console.log(`${client.user.username} Started!`)
+  console.log(`${client.user.username} Started!`);
+  client.user.setActivity("Made By Fantasy Tech");
 });
 
 client.on("message", async message => {
   if (message.channel.type === "dm") return;
   if (!message.content.startsWith(prefix)) return;
+  const invite = message.guild.fetchVanityCode();
   let args = message.content
     .slice(prefix.length)
     .trim()
@@ -70,4 +71,18 @@ client.on("message", async message => {
   }
 });
 
-client.login(config.token);
+client.on("message", async message => {
+  if(message.content.includes("https://")) {
+    //make more commands like this with diff includes
+    let link = await db.fetch(`al_${message.guild.id}`)
+    if(link === null) {
+      return; //it will not do anything if anti-link is disabled
+    }
+    if(link === true) {
+      message.delete()
+      message.reply(`${message.author.username} Links are not allowed in this server :x:`)
+    }
+  } //lets test it
+})
+
+client.login(process.env.TOKEN);
